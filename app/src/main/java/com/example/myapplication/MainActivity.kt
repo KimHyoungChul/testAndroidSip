@@ -24,20 +24,43 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-    test_button.setOnClickListener { view -> requestPermission() }
+    registerButton.setOnClickListener { view -> requestPermissions() }
+    callButton.setOnClickListener { view -> call() }
   }
 
-  fun requestPermission() {
-    val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.USE_SIP)
-    if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-      ActivityCompat.requestPermissions(
-        this,
-        arrayOf(Manifest.permission.USE_SIP),
-        REQUEST_USE_SIP
-      )
-    } else {
-      showSipDemoIntent()
+  //  sip:4955@172.21.23.11
+  fun call() {
+    SipManagerWrapper.getInstance().sipManager.makeAudioCall(
+      SipProfileWrapper.getInstance().sipProfile.uriString,
+      "sip:" + numberToCall.text + "@" + domain.text.toString(),
+      SipCallListener(),
+      10
+    )
+  }
+
+  fun requestPermissions() {
+
+    val permissions = arrayOf(
+      Manifest.permission.USE_SIP,
+      Manifest.permission.INTERNET,
+      Manifest.permission.RECORD_AUDIO,
+      Manifest.permission.ACCESS_WIFI_STATE,
+      Manifest.permission.WAKE_LOCK,
+      Manifest.permission.MODIFY_AUDIO_SETTINGS
+    )
+
+    for (permission in permissions) {
+      val permissionCheckResult = ContextCompat.checkSelfPermission(this, permission)
+      if (permissionCheckResult != PackageManager.PERMISSION_GRANTED) {
+        ActivityCompat.requestPermissions(
+          this,
+          permissions,
+          REQUEST_USE_SIP
+        )
+        return
+      }
     }
+    showSipDemoIntent()
   }
 
   fun showSipDemoIntent() {
@@ -49,8 +72,16 @@ class MainActivity : AppCompatActivity() {
       .init(username.text.toString(), domain.text.toString(), password.text.toString())
 
 
-    SipManagerWrapper.getInstance().sipManager?.setRegistrationListener(
-      SipProfileWrapper.getInstance().sipProfile?.uriString,
+    SipManagerWrapper.getInstance().sipManager.open(
+      SipProfileWrapper.getInstance().sipProfile,
+      pendingIntent,
+      null
+    )
+
+
+    SipManagerWrapper.getInstance().sipManager?.register(
+      SipProfileWrapper.getInstance().sipProfile,
+      100,
       object :
         SipRegistrationListener {
 
@@ -76,13 +107,6 @@ class MainActivity : AppCompatActivity() {
           )
         }
       })
-
-
-    SipManagerWrapper.getInstance().sipManager.open(
-      SipProfileWrapper.getInstance().sipProfile,
-      pendingIntent,
-      null
-    )
   }
 
   fun showToast(text: String) {

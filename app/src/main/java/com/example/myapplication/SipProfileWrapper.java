@@ -17,7 +17,8 @@ public class SipProfileWrapper {
   public void init(String username, String domain, String password) {
     try {
       SipProfile.Builder builder = new SipProfile.Builder(username, domain);
-      builder.setPassword(password);
+      builder.setPassword(password)
+          .setAutoRegistration(false);
       sipProfile = builder.build();
     } catch (ParseException e) {
       e.printStackTrace();

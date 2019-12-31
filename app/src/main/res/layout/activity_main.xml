@@ -12,6 +12,7 @@
     android:layout_height="wrap_content"
     android:ems="10"
     android:inputType="textPersonName"
+    android:text="4955"
     android:hint="username"/>
 
   <EditText
@@ -20,7 +21,7 @@
     android:layout_height="wrap_content"
     android:layout_below="@+id/username"
     android:ems="10"
-    android:inputType="textPersonName"
+    android:text="172.21.23.11"
     android:hint="domain" />
 
   <EditText
@@ -30,14 +31,31 @@
     android:layout_below="@+id/domain"
     android:ems="10"
     android:inputType="textPersonName"
-    android:hint="username" />
+    android:text="Passw0rd"
+    android:hint="password" />
 
   <Button
-    android:id="@+id/test_button"
+    android:id="@+id/registerButton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_below="@+id/password"
     android:gravity="bottom"
     android:text="Register" />
 
+  <EditText
+    android:id="@+id/numberToCall"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/registerButton"
+    android:ems="10"
+    android:text="81092"
+    android:hint="Enter Number To Call" />
+
+  <Button
+    android:id="@+id/callButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/numberToCall"
+    android:gravity="bottom"
+    android:text="Call" />
 </RelativeLayout>
